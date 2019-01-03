@@ -14,7 +14,7 @@ class CRM_GoogleDriveFolderSync_Form_GoogleDriveFolderSyncSettings extends CRM_O
   }
 
   protected function getHumanReadableConnectionName() {
-    return "JIRA";
+    return "Google Drive Folder Sync";
   }
 
 }
