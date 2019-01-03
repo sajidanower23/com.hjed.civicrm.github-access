@@ -12,8 +12,8 @@ class CRM_GoogleDriveFolderSync_Page_OAuthCallback extends CRM_Core_Page {
     CRM_Utils_System::setTitle(E::ts('OAuthCallback'));
 
     //verify the callback
-    if(CRM_GoogleDriveFolderSync_JiraApiHelper::verifyState($_GET['state'])) {
-      CRM_GoogleDriveFolderSync_JiraApiHelper::doOAuthCodeExchange($_GET['code']);
+    if(CRM_GoogleDriveFolderSync_GoogleDriveHelper::verifyState($_GET['state'])) {
+      CRM_GoogleDriveFolderSync_GoogleDriveHelper::doOAuthCodeExchange($_GET['code']);
       echo "success";
     } else {
       echo "error";

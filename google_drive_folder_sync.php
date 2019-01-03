@@ -219,7 +219,7 @@ function google_drive_folder_sync_civicrm_navigationMenu(&$menu) {
     'operator' => 'OR',
     'separator' => 0,
   ));
-  _google_drive_folder_sync_civix_insert_navigation_menu($menu, 'Administer/JIRA', array(
+  _google_drive_folder_sync_civix_insert_navigation_menu($menu, 'Administer/GoogleDriveSync', array(
     'label' => E::ts('Google Drive API Settings'),
     'name' => 'google_drive_folder_sync_settings',
     'url' => 'civicrm/google-drive-folder-sync/config',
@@ -227,7 +227,7 @@ function google_drive_folder_sync_civicrm_navigationMenu(&$menu) {
     'operator' => 'OR',
     'separator' => 0,
   ));
-  _google_drive_folder_sync_civix_insert_navigation_menu($menu, 'Administer/JIRA', array(
+  _google_drive_folder_sync_civix_insert_navigation_menu($menu, 'Administer/GoogleDriveSync', array(
     'label' => E::ts('Google Drive Connection'),
     'name' => 'google_drive_folder_syncion',
     'url' => 'civicrm/google-drive-folder-sync/connection',
