@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/GoogleDriveFolderSync</base>
+  <class>GoogleDriveFolder</class>
+  <name>civicrm_google_drive_folder</name>
+  <comment>FIXME</comment>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Entity ID that civicrm requires to be an int</comment>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+  <field>
+    <name>google_id</name>
+    <type>varchar</type>
+    <length>255</length>
+    <required>true</required>
+    <comment>Google Drive File ID</comment>
+  </field>
+  <field>
+    <name>role</name>
+    <type>varchar</type>
+    <length>255</length>
+    <required>true</required>
+    <comment>The google drive api role</comment>
+  </field>
+
+  <field>
+    <name>folder_name_and_role</name>
+    <pseudoconstant>
+      <optionGroupName>google_drive_folder_sync_groups_options</optionGroupName>
+    </pseudoconstant>
+    <type>varchar</type>
+    <length>255</length>
+    <required>true</required>
+  </field>
+</table>
