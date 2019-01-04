@@ -214,7 +214,7 @@ function google_drive_folder_sync_civicrm_oauthsync_google_drive_folder_sync_upd
 function google_drive_folder_sync_civicrm_navigationMenu(&$menu) {
   _google_drive_folder_sync_civix_insert_navigation_menu($menu, 'Administer', array(
     'label' => E::ts('Google Drive Settings'),
-    'name' => 'Google Drive SYnc',
+    'name' => 'GoogleDriveSync',
     'permission' => 'administer CiviCRM',
     'operator' => 'OR',
     'separator' => 0,
@@ -229,7 +229,7 @@ function google_drive_folder_sync_civicrm_navigationMenu(&$menu) {
   ));
   _google_drive_folder_sync_civix_insert_navigation_menu($menu, 'Administer/GoogleDriveSync', array(
     'label' => E::ts('Google Drive Connection'),
-    'name' => 'google_drive_folder_syncion',
+    'name' => 'google_drive_folder_sync_connection',
     'url' => 'civicrm/google-drive-folder-sync/connection',
     'permission' => 'administer CiviCRM',
     'operator' => 'OR',
