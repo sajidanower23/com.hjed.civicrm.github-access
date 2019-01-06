@@ -186,11 +186,12 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
   public static function removeContactFromRemoteGroup(&$contactId, $remoteGroup) {
     $remoteGroupDAO = CRM_GoogleDriveFolderSync_BAO_GoogleDriveFolder::getByOptionGroupValue($remoteGroup);
     self::refreshLocalPermissionsCache($remoteGroupDAO->google_id);
+
     $response = self::callGoogleApi(
       '/files/' .
       $remoteGroupDAO->google_id .
       '/permissions/' .
-      self::$googleDrivePermsCache[$remoteGroup->google_id][$remoteGroup->role][$contactId][0],
+      self::$googleDrivePermsCache[$remoteGroupDAO->google_id][$remoteGroupDAO->role][intval($contactId)][0],
       "DELETE"
     );
   }
@@ -219,15 +220,16 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
     foreach($response['permissions'] as $permission) {
       $contact = CRM_Contact_BAO_Contact::matchContactOnEmail($permission['emailAddress']);
       // drop contacts we don't match
-      // (for now this only supports one way sync)
+      // (for now this only support contacts that already exist in civicrm)
+      if(!key_exists($googleId, self::$googleDrivePermsCache)) {
+        self::$googleDrivePermsCache[$googleId] = array();
+      }
+      if(!key_exists($permission['role'], self::$googleDrivePermsCache[$googleId])) {
+        self::$googleDrivePermsCache[$googleId][$permission['role']] = array();
+      }
+
       if ($contact != null) {
-        if(!key_exists($googleId, self::$googleDrivePermsCache)) {
-          self::$googleDrivePermsCache[$googleId] = array();
-        }
-        if(!key_exists($permission['role'], self::$googleDrivePermsCache[$googleId])) {
-          self::$googleDrivePermsCache[$googleId][$permission['role']] = array();
-        }
-        self::$googleDrivePermsCache[$googleId][$permission['role']][$contact] = array(
+        self::$googleDrivePermsCache[$googleId][$permission['role']][$contact->contact_id] = array(
           $permission['id'], $permission
         );
       }
@@ -243,7 +245,8 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
    */
   public static function getAllGDriveUserForRoleAndGroup($remoteGroup) {
     $contactIds = array();
-
+    print("remote group\n");
+    print_r($remoteGroup);
     $remoteGroupDAO = CRM_GoogleDriveFolderSync_BAO_GoogleDriveFolder::getByOptionGroupValue($remoteGroup);
     self::refreshLocalPermissionsCache($remoteGroupDAO->google_id);
     foreach(self::$googleDrivePermsCache[$remoteGroupDAO->google_id][$remoteGroup->role] as $contactId => $permission) {
