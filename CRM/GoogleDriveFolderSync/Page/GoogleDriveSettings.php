@@ -11,7 +11,6 @@ class CRM_GoogleDriveFolderSync_Page_GoogleDriveSettings extends CRM_Core_Page {
 
     $connected = civicrm_api3('Setting', 'get', array('group' => 'google_drive_folder_sync_token'))["values"][1]['google_drive_folder_synced'];
     $client_id = civicrm_api3('Setting', 'get', array('group' => 'google_drive_folder_sync'))["values"][1]['google_drive_folder_sync_client_id'];
-    print_r(civicrm_api3('Setting', 'get', array('group' => 'google_drive_folder_sync'))['values'][1]['google_drive_folder_sync_key']);
     $this->assign('connected', $connected);
 //    if($connected) {
 //    } else {

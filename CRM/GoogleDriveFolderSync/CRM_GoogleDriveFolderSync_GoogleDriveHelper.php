@@ -34,11 +34,9 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
       'code' => $code
     );
     $postBody = json_encode($requestJsonDict, JSON_UNESCAPED_SLASHES);
-    print $postBody;
 
     // make a request
     $ch = curl_init(self::TOKEN_URL);
-//    $ch = curl_init('http://localhost:1500');
     curl_setopt_array($ch, array(
       CURLOPT_POST => TRUE,
       CURLOPT_RETURNTRANSFER => TRUE,
@@ -49,8 +47,6 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
       CURLOPT_USERAGENT => 'curl/7.55.1',
       CURLOPT_POSTFIELDS => $postBody
     ));
-//    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
-    print "requesting\n\n";
     $response = curl_exec($ch);
     if(curl_errno($ch)) {
       echo 'Request Error:' . curl_error($ch);
@@ -85,7 +81,6 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
 
     // build the url
     $url = self::GOOGLE_DRIVE_REST_API_URL . $path;
-    print $url;
 
     $ch = curl_init($url);
     curl_setopt_array($ch, array(
@@ -94,22 +89,11 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
     ));
     if($body != NULL) {
       $encodedBody = json_encode($body);
-      print("\b<br>");
-      print($encodedBody);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedBody);
     }
-    print "\n\ncall " . $path;
     self::oauthHelper()->addAccessToken($ch);
 
-    print("<br/>connecting\n\n<br/>");
     $response = curl_exec($ch);
-    print("<br/>response\n\n<br/>");
-    print_r($response);
-    print("<br/>response\n\n<br/>");
-    print "-" . $response . "-";
-    print("\n\n<br/>");
-    print curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    print("\n\n<br/>");
     if (curl_errno($ch) || curl_getinfo($ch, CURLINFO_HTTP_CODE) >= 300) {
       print 'Request Error:' . curl_error($ch);
       print '<br/>\nStatus Code: ' . curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -130,7 +114,6 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
     );
     // TODO: handle pagination
 
-    print_r($groups_json);
     if(!array_key_exists("files", $groups_json)) {
       throw new CRM_Extension_Exception("Didn't get any files");
     }
@@ -245,8 +228,6 @@ class CRM_GoogleDriveFolderSync_GoogleDriveHelper {
    */
   public static function getAllGDriveUserForRoleAndGroup($remoteGroup) {
     $contactIds = array();
-    print("remote group\n");
-    print_r($remoteGroup);
     $remoteGroupDAO = CRM_GoogleDriveFolderSync_BAO_GoogleDriveFolder::getByOptionGroupValue($remoteGroup);
     self::refreshLocalPermissionsCache($remoteGroupDAO->google_id);
     foreach(self::$googleDrivePermsCache[$remoteGroupDAO->google_id][$remoteGroup->role] as $contactId => $permission) {

@@ -56,17 +56,19 @@ class CRM_GoogleDriveFolderSync_Upgrader extends CRM_GoogleDriveFolderSync_Upgra
   }
 
   /**
-   * Example: Run a couple simple queries.
-   *
    * @return TRUE on success
    * @throws Exception
-   *
-  public function upgrade_4200() {
-    $this->ctx->log->info('Applying update 4200');
-    CRM_Core_DAO::executeQuery('UPDATE foo SET bar = "whiz"');
-    CRM_Core_DAO::executeQuery('DELETE FROM bang WHERE willy = wonka(2)');
+   */
+  public function upgrade_1001() {
+    $this->ctx->log->info('Applying update 1000');
+    $defaults = array();
+    $params = array('name' => 'google_drive_folder_sync_sync_mode');
+  $optionGroupParams = array('name' => 'oauth_sync_modes');
+    $customField = CRM_Core_BAO_CustomField::retrieve($params, $defaults);
+    $customField->option_group_id = CRM_Core_BAO_OptionGroup::retrieve($optionGroupParams, $defaults)->id;
+    $customField->save();
     return TRUE;
-  } // */
+  }
 
 
   /**

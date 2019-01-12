@@ -162,7 +162,6 @@ function google_drive_folder_sync_civicrm_oauthsync_consent_success(&$prefix) {
 function google_drive_folder_sync_civicrm_oauthsync_google_drive_folder_sync_sync_groups_list(&$groups) {
   // query, searches for folders in the root
   $groups_json = CRM_GoogleDriveFolderSync_GoogleDriveHelper::getFolderList();
-  print_r($groups_json);
 
   foreach ($groups_json as $group) {
     $groups[] = $group;
@@ -184,7 +183,6 @@ function google_drive_folder_sync_civicrm_oauthsync_google_drive_folder_sync_get
     $members[] = $contactId;
   }
 
-  print_r($members);
 }
 
 /**
@@ -199,7 +197,6 @@ function google_drive_folder_sync_civicrm_oauthsync_google_drive_folder_sync_upd
     CRM_GoogleDriveFolderSync_GoogleDriveHelper::addContactToRemoteGroup($contactId, $remoteGroupName);
   }
   // TODO: handle the above being an error
-  print("starting on remove\n");
   foreach($toRemove as $contactId) {
     CRM_GoogleDriveFolderSync_GoogleDriveHelper::removeContactFromRemoteGroup($contactId, $remoteGroupName);
   }
