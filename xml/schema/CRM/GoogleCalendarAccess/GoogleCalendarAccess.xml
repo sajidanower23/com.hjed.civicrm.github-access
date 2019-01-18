@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
 <table>
-  <base>CRM/GoogleDriveFolderSync</base>
-  <class>GoogleDriveFolder</class>
-  <name>civicrm_google_drive_folder</name>
+  <base>CRM/GoogleCalendarAccess</base>
+  <class>GoogleCalendarAccess</class>
+  <name>civicrm_google_calendar_access</name>
   <comment>FIXME</comment>
   <log>true</log>
 
@@ -22,20 +22,20 @@
     <type>varchar</type>
     <length>255</length>
     <required>true</required>
-    <comment>Google Drive File ID</comment>
+    <comment>Google Calendar File ID</comment>
   </field>
   <field>
     <name>role</name>
     <type>varchar</type>
     <length>255</length>
     <required>true</required>
-    <comment>The google drive api role</comment>
+    <comment>The google Calendar api role</comment>
   </field>
 
   <field>
-    <name>folder_name_and_role</name>
+    <name>calendar_name_and_role</name>
     <pseudoconstant>
-      <optionGroupName>google_drive_folder_sync_groups_options</optionGroupName>
+      <optionGroupName>google_calendar_access_groups_options</optionGroupName>
     </pseudoconstant>
     <type>varchar</type>
     <length>255</length>

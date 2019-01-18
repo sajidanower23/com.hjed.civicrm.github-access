@@ -3,8 +3,8 @@
 <CustomData>
   <CustomGroups>
     <CustomGroup>
-      <name>google_drive_folder_sync_sync_settings</name>
-      <title>Google Drive Sync Settings</title>
+      <name>google_calendar_access_sync_settings</name>
+      <title>Google Calendar Sync Settings</title>
       <extends>Group</extends>
       <style>Inline</style>
       <collapse_display>1</collapse_display>
@@ -12,7 +12,7 @@
       <help_post></help_post>
       <weight>8</weight>
       <is_active>1</is_active>
-      <table_name>civicrm_value_google_drive_folder_sync_sync_set</table_name>
+      <table_name>civicrm_value_google_calendar_access_sync_set</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
       <created_date>2018-09-16 17:46:39</created_date>
@@ -22,8 +22,8 @@
   </CustomGroups>
   <CustomFields>
     <CustomField>
-      <name>google_drive_folder_sync_sync_settings</name>
-      <label>Google Drive Groups</label>
+      <name>google_calendar_access_sync_settings</name>
+      <label>Google Calendar Access Sync</label>
       <data_type>String</data_type>
       <html_type>Select</html_type>
       <is_required>0</is_required>
@@ -35,14 +35,14 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>civicrm_google_drive_folder_sync_sync_groups</column_name>
+      <column_name>civicrm_google_calendar_access_sync_groups</column_name>
       <in_selector>0</in_selector>
-      <option_group_name>google_drive_folder_sync_sync_groups_options</option_group_name>
-      <custom_group_name>google_drive_folder_sync_sync_settings</custom_group_name>
+      <option_group_name>google_calendar_access_sync_groups_options</option_group_name>
+      <custom_group_name>google_calendar_access_sync_settings</custom_group_name>
     </CustomField>
     <CustomField>
-      <name>google_drive_folder_sync_sync_mode</name>
-      <label>Google Drive Sync Mode</label>
+      <name>google_calendar_access_sync_mode</name>
+      <label>Google Calendar Sync Mode</label>
       <data_type>String</data_type>
       <html_type>Select</html_type>
       <is_required>0</is_required>
@@ -54,16 +54,16 @@
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>civicrm_google_drive_folder_sync_sync_mode</column_name>
+      <column_name>civicrm_google_calendar_access_sync_mode</column_name>
       <in_selector>0</in_selector>
       <option_group_name>oauth_sync_modes</option_group_name>
-      <custom_group_name>google_drive_folder_sync_sync_settings</custom_group_name>
+      <custom_group_name>google_calendar_access_sync_settings</custom_group_name>
     </CustomField>
   </CustomFields>
   <OptionGroups>
     <OptionGroup>
-      <name>google_drive_folder_sync_sync_groups_options</name>
-      <title>Google Drive Groups</title>
+      <name>google_calendar_access_sync_groups_options</name>
+      <title>Google Calendar Groups</title>
       <data_type>String</data_type>
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>

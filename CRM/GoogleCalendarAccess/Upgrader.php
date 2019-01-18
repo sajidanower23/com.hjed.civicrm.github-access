@@ -1,19 +1,24 @@
 <?php
-use CRM_GoogleDriveFolderSync_ExtensionUtil as E;
+use CRM_GoogleCalendarAccess_ExtensionUtil as E;
 
 /**
  * Collection of upgrade steps.
  */
-class CRM_GoogleDriveFolderSync_Upgrader extends CRM_GoogleDriveFolderSync_Upgrader_Base {
+class CRM_GoogleCalendarAccess_Upgrader extends CRM_GoogleCalendarAccess_Upgrader_Base {
 
   // By convention, functions that look like "function upgrade_NNNN()" are
   // upgrade tasks. They are executed in order (like Drupal's hook_update_N).
 
   /**
-   * Example: Run an external SQL script when the module is installed.
-   *
+   * Setup group
+   */
   public function install() {
-    $this->executeSqlFile('sql/myinstall.sql');
+    $defaults = array();
+    $params = array('name' => 'google_calendar_access_sync_mode');
+    $optionGroupParams = array('name' => 'oauth_sync_modes');
+    $customField = CRM_Core_BAO_CustomField::retrieve($params, $defaults);
+    $customField->option_group_id = CRM_Core_BAO_OptionGroup::retrieve($optionGroupParams, $defaults)->id;
+    $customField->save();
   }
 
   /**
@@ -54,22 +59,6 @@ class CRM_GoogleDriveFolderSync_Upgrader extends CRM_GoogleDriveFolderSync_Upgra
   public function disable() {
     CRM_Core_DAO::executeQuery('UPDATE foo SET is_active = 0 WHERE bar = "whiz"');
   }
-
-  /**
-   * @return TRUE on success
-   * @throws Exception
-   */
-  public function upgrade_1001() {
-    $this->ctx->log->info('Applying update 1000');
-    $defaults = array();
-    $params = array('name' => 'google_drive_folder_sync_sync_mode');
-  $optionGroupParams = array('name' => 'oauth_sync_modes');
-    $customField = CRM_Core_BAO_CustomField::retrieve($params, $defaults);
-    $customField->option_group_id = CRM_Core_BAO_OptionGroup::retrieve($optionGroupParams, $defaults)->id;
-    $customField->save();
-    return TRUE;
-  }
-
 
   /**
    * Example: Run an external SQL script.

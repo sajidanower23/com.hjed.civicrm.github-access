@@ -62,7 +62,7 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `civicrm_google_drive_folder`;
+DROP TABLE IF EXISTS `civicrm_google_calendar_access`;
 
 SET FOREIGN_KEY_CHECKS=1;
 -- /*******************************************************
@@ -73,18 +73,18 @@ SET FOREIGN_KEY_CHECKS=1;
 
 -- /*******************************************************
 -- *
--- * civicrm_google_drive_folder
+-- * civicrm_google_calendar_access
 -- *
 -- * FIXME
 -- *
 -- *******************************************************/
-CREATE TABLE `civicrm_google_drive_folder` (
+CREATE TABLE `civicrm_google_calendar_access` (
 
 
      `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Entity ID that civicrm requires to be an int',
-     `google_id` varchar(255) NOT NULL   COMMENT 'Google Drive File ID',
-     `role` varchar(255) NOT NULL   COMMENT 'The google drive api role',
-     `folder_name_and_role` varchar(255) NOT NULL    
+     `google_id` varchar(255) NOT NULL   COMMENT 'Google Calendar File ID',
+     `role` varchar(255) NOT NULL   COMMENT 'The google Calendar api role',
+     `calendar_name_and_role` varchar(255) NOT NULL
 ,
         PRIMARY KEY (`id`)
  
