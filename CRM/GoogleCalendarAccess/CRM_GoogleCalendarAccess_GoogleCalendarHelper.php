@@ -147,6 +147,14 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
     // get the remote group
     $remoteGroup = CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::getByOptionGroupValue($remoteGroup);
 
+    // check the contact doesn't already have a higher permission in the group
+    self::refreshLocalPermissionsCache($remoteGroup->google_id);
+    foreach (CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::G_CALENDAR_ROLE_IGNORE_IF[$remoteGroup->role] as $superiorRole) {
+      if(array_key_exists(intval($contactId),  self::$googleCalendarPermsCache[$remoteGroup->google_id][$superiorRole])) {
+        return;
+      }
+    }
+
 
     $contactEmail = self::getContactEmail($contactId);
 
@@ -172,6 +180,11 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
   public static function removeContactFromRemoteGroup(&$contactId, $remoteGroup) {
     $remoteGroupDAO = CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::getByOptionGroupValue($remoteGroup);
     self::refreshLocalPermissionsCache($remoteGroupDAO->google_id);
+
+    if(!key_exists(intval($contactId), self::$googleCalendarPermsCache[$remoteGroupDAO->google_id][$remoteGroupDAO->role])) {
+      CRM_Core_Error::debug_log_message("Tried to remove user from google calendar, but they weren't there");
+      return;
+    }
 
     $response = self::callGoogleApi(
       '/calendars/' .
@@ -209,7 +222,7 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
         // ignore groups, domains, public scopes, etc
         $permission['scope']['type'] == 'user' &&
         // additionally google adds a special gcal user
-        !preg_match('/@group.calendar.google.com$/', permissions['scope']['value'])
+        !preg_match('/@group.calendar.google.com$/', $permission['scope']['value'])
       ) {
         $contact = CRM_Contact_BAO_Contact::matchContactOnEmail($permission['scope']['value']);
         // drop contacts we don't match

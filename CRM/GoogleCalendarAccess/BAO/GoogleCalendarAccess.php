@@ -6,6 +6,15 @@ class CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess extends CRM_GoogleCalend
   const G_CALENDAR_ROLES = array(
     'freeBusyReader', 'reader', 'writer', 'owner'
   );
+
+  /**
+   * map of roles to roles they should not override
+   */
+  const G_CALENDAR_ROLE_IGNORE_IF = array(
+    'freeBusyReader' => array('reader', 'writer', 'owner'),
+    'reader' =>  array('writer', 'owner'),
+    'write' => array('owner')
+  );
   /**
    * Create a new GoogleCalendarAccess based on array-data
    *
