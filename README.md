@@ -4,12 +4,15 @@ This extension will provide two way sync of groups in CiviCRM and Google Calenda
 It is intended for people who do not have a google apps domain, if you have google apps I recomend
 syncing via the Google Groups API instead. 
 
+Important: if a user has higher access that already then you grant through this system, the access you grant
+will be ignored.
+
 This plugin is being developed for [BLUEsat UNSW](http://bluesat.com.au).
 
 This plugin is intended for a specific use case. Assumptions made here may not meet your needs.
 
 Note: this plugin gives users who have access to modify group custom fields effective access to control
-access on all folders in the connected google account. It is intended in future to be able to restrict this.
+access on all calendars in the connected google account. It is intended in future to be able to restrict this.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
