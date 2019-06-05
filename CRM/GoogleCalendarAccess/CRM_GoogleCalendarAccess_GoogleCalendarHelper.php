@@ -214,10 +214,14 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
       return;
     }
 
-    // NOTE: this will only handle a page of 250, after that need to paginate
     $response = self::callGoogleApi('/calendars/' . $googleId . '/acl?maxResults=250');
+    $permissions = $response['items'];
+    while(array_key_exists('nextPageToken', $response) && $response['nextPageToken'] != null) {
+      $response = self::callGoogleApi('/calendars/' . $googleId . '/acl?maxResults=250&pageToken=' . $response['nextPageToken']);
+      $permissions += $response['items'];
+    }
     // TODO: error handling and pagination
-    foreach($response['items'] as $permission) {
+    foreach($permissions as $permission) {
       if(
         // ignore groups, domains, public scopes, etc
         $permission['scope']['type'] == 'user' &&
