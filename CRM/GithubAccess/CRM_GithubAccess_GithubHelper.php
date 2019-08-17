@@ -2,6 +2,7 @@
 /**
  * Helper Functions for the Github Api
  */
+// Important logic happens here
 class CRM_GithubAccess_GithubHelper {
 
   const TOKEN_URL = "https://www.googleapis.com/oauth2/v4/token";

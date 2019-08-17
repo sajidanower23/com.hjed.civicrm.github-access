@@ -1,4 +1,5 @@
 <?php
+// Important logic happens here
 use CRM_GithubAccess_ExtensionUtil as E;
 require_once __DIR__ . "/../CRM_GithubAccess_GithubHelper.php";
 
