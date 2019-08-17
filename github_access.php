@@ -161,7 +161,7 @@ function github_access_civicrm_oauthsync_consent_success(&$prefix) {
  */
 function github_access_civicrm_oauthsync_github_access_sync_groups_list(&$groups) {
   // query, searches for folders in the root
-  $groups_json = CRM_GithubAccess_GithubHelper::getCalendarList();
+  $groups_json = CRM_GithubAccess_GithubHelper::getTeams(); // getTeams
 
   foreach ($groups_json as $group) {
     $groups[] = $group;

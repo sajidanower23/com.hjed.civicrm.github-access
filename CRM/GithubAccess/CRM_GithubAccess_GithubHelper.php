@@ -5,8 +5,8 @@
 // Important logic happens here
 class CRM_GithubAccess_GithubHelper {
 
-  const TOKEN_URL = "https://www.googleapis.com/oauth2/v4/token";
-  const github_REST_API_URL = 'https://www.googleapis.com/calendar/v3';
+  const TOKEN_URL = "https://github.com/login/oauth/access_token";
+  const github_REST_API_URL = 'https://api.github.com';
 
   public static function oauthHelper() {
     static $oauthHelperObj = null;
@@ -78,7 +78,7 @@ class CRM_GithubAccess_GithubHelper {
    * @param array $body the body of the post request
    * @return array | CRM_Core_Error
    */
-  public static function callGoogleApi($path, $method = "GET", $body = NULL) {
+  public static function callGithubApi($path, $method = "GET", $body = NULL) {
 
     // build the url
     $url = self::github_REST_API_URL . $path;
@@ -107,21 +107,16 @@ class CRM_GithubAccess_GithubHelper {
     }
   }
 
-  public static function getCalendarList() {
+  public static function getTeams() {
     // TODO: use sync tokens to reduce load here
-    $groups_json = self::callGoogleApi(
-      // we set the minAccessRole to `owner` as those are the only calendars we can control sharing on
-      '/users/me/calendarList?minAccessRole=owner',
+    $groups_json = self::callGithubApi(
+      "/orgs/bluesat/teams",
       "GET"
     );
     // TODO: handle pagination
 
-    if(!array_key_exists("items", $groups_json)) {
-      throw new CRM_Extension_Exception("Didn't get any calendars");
-    }
-
     $folderNames = array();
-    foreach ($groups_json['items'] as $file) {
+    foreach ($groups_json as $file) {
       $folderNames = array_merge($folderNames, CRM_GithubAccess_BAO_GithubAccess::createFromGoogCalListEntry($file));
     }
 
@@ -159,7 +154,7 @@ class CRM_GithubAccess_GithubHelper {
 
     $contactEmail = self::getContactEmail($contactId);
 
-    $response = self::callGoogleApi(
+    $response = self::callGithubApi(
       '/calendars/' . $remoteGroup->google_id . '/acl', "POST", array(
         'role' => $remoteGroup->role,
         'scope' => array(
@@ -187,7 +182,7 @@ class CRM_GithubAccess_GithubHelper {
       return;
     }
 
-    $response = self::callGoogleApi(
+    $response = self::callGithubApi(
       '/calendars/' .
       $remoteGroupDAO->google_id .
       '/acl/' .
@@ -216,7 +211,7 @@ class CRM_GithubAccess_GithubHelper {
     }
 
     // NOTE: this will only handle a page of 250, after that need to paginate
-    $response = self::callGoogleApi('/calendars/' . $googleId . '/acl?maxResults=250');
+    $response = self::callGithubApi('/calendars/' . $googleId . '/acl?maxResults=250');
     // TODO: error handling and pagination
     foreach($response['items'] as $permission) {
       if(

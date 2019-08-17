@@ -20,16 +20,16 @@ class CRM_GithubAccess_Page_GithubAccessSettings extends CRM_Core_Page {
       CRM_GithubAccess_GithubHelper::oauthHelper()->setOauthCallbackReturnPath(
         join('/', $this->urlPath)
       );
-      $scope = urlencode("https://www.googleapis.com/auth/calendar");
+      $scope = urlencode("admin:org");
       $this->assign(
         'oauth_url',
-        'https://accounts.google.com/o/oauth2/v2/auth' .
+        'https://github.com/login/oauth/authorize' .
         '?client_id=' . $client_id .
-        '&access_type=offline' .
+        // '&access_type=offline' .
         '&scope=' . $scope .
-        '&redirect_uri=' . $redirect_url .
-        '&state=' . $state .
-        '&response_type=code&prompt=consent'
+        // '&redirect_uri=' . $redirect_url .
+        '&state=' . $state
+        // '&response_type=code&prompt=consent'
       );
 //    }
     // Example: Assign a variable for use in a template
@@ -37,5 +37,4 @@ class CRM_GithubAccess_Page_GithubAccessSettings extends CRM_Core_Page {
 
     parent::run();
   }
-
 }
