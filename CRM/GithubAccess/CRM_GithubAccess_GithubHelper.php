@@ -1,16 +1,16 @@
 <?php
 /**
- * Helper Functions for the Google Calendar Api
+ * Helper Functions for the Github Api
  */
-class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
+class CRM_GithubAccess_GithubHelper {
 
   const TOKEN_URL = "https://www.googleapis.com/oauth2/v4/token";
-  const GOOGLE_Calendar_REST_API_URL = 'https://www.googleapis.com/calendar/v3';
+  const github_REST_API_URL = 'https://www.googleapis.com/calendar/v3';
 
   public static function oauthHelper() {
     static $oauthHelperObj = null;
     if($oauthHelperObj == null) {
-      $oauthHelperObj = new CRM_OauthSync_OAuthHelper("google_calendar_access", self::TOKEN_URL);
+      $oauthHelperObj = new CRM_OauthSync_OAuthHelper("github_access", self::TOKEN_URL);
     }
     return $oauthHelperObj;
   }
@@ -22,8 +22,8 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
    * @param $code the code to use for the exchange
    */
   public static function doOAuthCodeExchange($code) {
-    $client_id = Civi::settings()->get('google_calendar_access_client_id');
-    $client_secret = Civi::settings()->get('google_calendar_access_secret');
+    $client_id = Civi::settings()->get('github_access_client_id');
+    $client_secret = Civi::settings()->get('github_access_secret');
     $redirect_url = CRM_OauthSync_OAuthHelper::generateRedirectUrl();
 
     $requestJsonDict = array(
@@ -59,8 +59,8 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
         echo $response_json["error_description"];
       } else {
         self::oauthHelper()->parseOAuthTokenResponse($response_json);
-        Civi::settings()->set("google_calendar_access_connected", true);
-        $return_path = CRM_Utils_System::url('civicrm/google-calendar-folder-sync/connection', 'reset=1', TRUE, NULL, FALSE, FALSE);
+        Civi::settings()->set("github_access_connected", true);
+        $return_path = CRM_Utils_System::url('civicrm/github-folder-sync/connection', 'reset=1', TRUE, NULL, FALSE, FALSE);
         header("Location: " . $return_path);
         die();
       }
@@ -69,9 +69,9 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
   }
 
   /**
-   * Call a Google Calendar api endpoint
+   * Call a Github api endpoint
    *
-   * @param string $path the path after the Google Calendarbase url
+   * @param string $path the path after the Githubbase url
    *  Ex. /rest/api/3/groups/picker
    * @param string $method the http method to use
    * @param array $body the body of the post request
@@ -80,7 +80,7 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
   public static function callGoogleApi($path, $method = "GET", $body = NULL) {
 
     // build the url
-    $url = self::GOOGLE_Calendar_REST_API_URL . $path;
+    $url = self::github_REST_API_URL . $path;
 
     $ch = curl_init($url);
     curl_setopt_array($ch, array(
@@ -98,8 +98,8 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
       print 'Request Error:' . curl_error($ch);
       print '<br/>\nStatus Code: ' . curl_getinfo($ch, CURLINFO_HTTP_CODE);
       print_r($ch);
-      throw new CRM_Extension_Exception("Google Calendar API Request Failed");
-      return CRM_Core_Error::createError("Failed to access Google CalendarAPI");
+      throw new CRM_Extension_Exception("Github API Request Failed");
+      return CRM_Core_Error::createError("Failed to access GithubAPI");
       // TODO: handle this better
     } else {
       return json_decode($response, true);
@@ -121,7 +121,7 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
 
     $folderNames = array();
     foreach ($groups_json['items'] as $file) {
-      $folderNames = array_merge($folderNames, CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::createFromGoogCalListEntry($file));
+      $folderNames = array_merge($folderNames, CRM_GithubAccess_BAO_GithubAccess::createFromGoogCalListEntry($file));
     }
 
     return $folderNames;
@@ -139,18 +139,18 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
 
   /**
    * Adds the contact to the remote group.
-   * If the contact has not been synced before it will add its Google Calendar account details
+   * If the contact has not been synced before it will add its Github account details
    * @param $contactId the contact id of the remote contact
    * @param $remoteGroup the remote group name
    */
   public static function addContactToRemoteGroup($contactId, $remoteGroup) {
     // get the remote group
-    $remoteGroup = CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::getByOptionGroupValue($remoteGroup);
+    $remoteGroup = CRM_GithubAccess_BAO_GithubAccess::getByOptionGroupValue($remoteGroup);
 
     // check the contact doesn't already have a higher permission in the group
     self::refreshLocalPermissionsCache($remoteGroup->google_id);
-    foreach (CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::G_CALENDAR_ROLE_IGNORE_IF[$remoteGroup->role] as $superiorRole) {
-      if(array_key_exists(intval($contactId),  self::$googleCalendarPermsCache[$remoteGroup->google_id][$superiorRole])) {
+    foreach (CRM_GithubAccess_BAO_GithubAccess::G_CALENDAR_ROLE_IGNORE_IF[$remoteGroup->role] as $superiorRole) {
+      if(array_key_exists(intval($contactId),  self::$GithubPermsCache[$remoteGroup->google_id][$superiorRole])) {
         return;
       }
     }
@@ -168,7 +168,7 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
       )
     );
 
-    self::$googleCalendarPermsCache[$remoteGroup->google_id][$remoteGroup->role][$contactId] =
+    self::$GithubPermsCache[$remoteGroup->google_id][$remoteGroup->role][$contactId] =
       array($response['id'], $response);
   }
 
@@ -178,11 +178,11 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
    * @param string $remoteGroup the remote group to remove them from
    */
   public static function removeContactFromRemoteGroup(&$contactId, $remoteGroup) {
-    $remoteGroupDAO = CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::getByOptionGroupValue($remoteGroup);
+    $remoteGroupDAO = CRM_GithubAccess_BAO_GithubAccess::getByOptionGroupValue($remoteGroup);
     self::refreshLocalPermissionsCache($remoteGroupDAO->google_id);
 
-    if(!key_exists(intval($contactId), self::$googleCalendarPermsCache[$remoteGroupDAO->google_id][$remoteGroupDAO->role])) {
-      CRM_Core_Error::debug_log_message("Tried to remove user from google calendar, but they weren't there");
+    if(!key_exists(intval($contactId), self::$GithubPermsCache[$remoteGroupDAO->google_id][$remoteGroupDAO->role])) {
+      CRM_Core_Error::debug_log_message("Tried to remove user from Github, but they weren't there");
       return;
     }
 
@@ -190,27 +190,27 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
       '/calendars/' .
       $remoteGroupDAO->google_id .
       '/acl/' .
-      self::$googleCalendarPermsCache[$remoteGroupDAO->google_id][$remoteGroupDAO->role][intval($contactId)][0],
+      self::$GithubPermsCache[$remoteGroupDAO->google_id][$remoteGroupDAO->role][intval($contactId)][0],
       "DELETE"
     );
   }
 
   //format is [fileId][role][contactId] = array(permissionId, jsonObject)
-  private static $googleCalendarPermsCache = array();
+  private static $GithubPermsCache = array();
 
   /**
    * Because we can't lookup an individual permission without getting the whole list, this
-   * requests the permissions for the given google Calendar file id and caches them by role and contactId.
+   * requests the permissions for the given Github file id and caches them by role and contactId.
    *
    * This makes delete a lot faster.
    *
-   * @param $googleId the google Calendar id
+   * @param $googleId the Github id
    * @param bool $forceUpdate
    * @throws CRM_Extension_Exception
    */
   private static function refreshLocalPermissionsCache($googleId, $forceUpdate=false) {
 
-    if(!$forceUpdate && key_exists($googleId, self::$googleCalendarPermsCache)) {
+    if(!$forceUpdate && key_exists($googleId, self::$GithubPermsCache)) {
       return;
     }
 
@@ -227,15 +227,15 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
         $contact = CRM_Contact_BAO_Contact::matchContactOnEmail($permission['scope']['value']);
         // drop contacts we don't match
         // (for now this only support contacts that already exist in civicrm)
-        if (!key_exists($googleId, self::$googleCalendarPermsCache)) {
-          self::$googleCalendarPermsCache[$googleId] = array();
+        if (!key_exists($googleId, self::$GithubPermsCache)) {
+          self::$GithubPermsCache[$googleId] = array();
         }
-        if (!key_exists($permission['role'], self::$googleCalendarPermsCache[$googleId])) {
-          self::$googleCalendarPermsCache[$googleId][$permission['role']] = array();
+        if (!key_exists($permission['role'], self::$GithubPermsCache[$googleId])) {
+          self::$GithubPermsCache[$googleId][$permission['role']] = array();
         }
 
         if ($contact != null) {
-          self::$googleCalendarPermsCache[$googleId][$permission['role']][$contact->contact_id] = array(
+          self::$GithubPermsCache[$googleId][$permission['role']][$contact->contact_id] = array(
             $permission['id'], $permission
           );
         }
@@ -252,9 +252,9 @@ class CRM_GoogleCalendarAccess_GoogleCalendarHelper {
    */
   public static function getAllGCalendarUserForRoleAndGroup($remoteGroup) {
     $contactIds = array();
-    $remoteGroupDAO = CRM_GoogleCalendarAccess_BAO_GoogleCalendarAccess::getByOptionGroupValue($remoteGroup);
+    $remoteGroupDAO = CRM_GithubAccess_BAO_GithubAccess::getByOptionGroupValue($remoteGroup);
     self::refreshLocalPermissionsCache($remoteGroupDAO->google_id);
-    foreach(self::$googleCalendarPermsCache[$remoteGroupDAO->google_id][$remoteGroup->role] as $contactId => $permission) {
+    foreach(self::$GithubPermsCache[$remoteGroupDAO->google_id][$remoteGroup->role] as $contactId => $permission) {
         $contactIds[] = $contactId;
     }
     return $contactIds;

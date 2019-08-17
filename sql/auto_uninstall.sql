@@ -33,6 +33,6 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `civicrm_google_calendar_access`;
+DROP TABLE IF EXISTS `civicrm_github_access`;
 
 SET FOREIGN_KEY_CHECKS=1;

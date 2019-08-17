@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
 <table>
-  <base>CRM/GoogleCalendarAccess</base>
-  <class>GoogleCalendarAccess</class>
-  <name>civicrm_google_calendar_access</name>
+  <base>CRM/GithubAccess</base>
+  <class>GithubAccess</class>
+  <name>civicrm_github_access</name>
   <comment>FIXME</comment>
   <log>true</log>
 
@@ -22,20 +22,20 @@
     <type>varchar</type>
     <length>255</length>
     <required>true</required>
-    <comment>Google Calendar File ID</comment>
+    <comment>Github File ID</comment>
   </field>
   <field>
     <name>role</name>
     <type>varchar</type>
     <length>255</length>
     <required>true</required>
-    <comment>The google Calendar api role</comment>
+    <comment>The Github api role</comment>
   </field>
 
   <field>
     <name>calendar_name_and_role</name>
     <pseudoconstant>
-      <optionGroupName>google_calendar_access_groups_options</optionGroupName>
+      <optionGroupName>github_access_groups_options</optionGroupName>
     </pseudoconstant>
     <type>varchar</type>
     <length>255</length>

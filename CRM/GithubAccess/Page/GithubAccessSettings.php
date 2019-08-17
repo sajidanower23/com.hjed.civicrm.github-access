@@ -1,22 +1,22 @@
 <?php
-use CRM_GoogleCalendarAccess_ExtensionUtil as E;
-require_once __DIR__ . "/../CRM_GoogleCalendarAccess_GoogleCalendarHelper.php";
+use CRM_GithubAccess_ExtensionUtil as E;
+require_once __DIR__ . "/../CRM_GithubAccess_GithubHelper.php";
 
-class CRM_GoogleCalendarAccess_Page_GoogleCalendarAccessSettings extends CRM_Core_Page {
+class CRM_GithubAccess_Page_GithubAccessSettings extends CRM_Core_Page {
 
   public function run() {
     // Example: Set the page-title dynamically; alternatively, declare a static title in xml/Menu/*.xml
-    CRM_Utils_System::setTitle(E::ts('Your Google Calendar Connection'));
+    CRM_Utils_System::setTitle(E::ts('Your Github Connection'));
 
 
-    $connected = civicrm_api3('Setting', 'get', array('group' => 'google_calendar_access_token'))["values"][1]['google_calendar_accessed'];
-    $client_id = civicrm_api3('Setting', 'get', array('group' => 'google_calendar_access'))["values"][1]['google_calendar_access_client_id'];
+    $connected = civicrm_api3('Setting', 'get', array('group' => 'github_access_token'))["values"][1]['github_accessed'];
+    $client_id = civicrm_api3('Setting', 'get', array('group' => 'github_access'))["values"][1]['github_access_client_id'];
     $this->assign('connected', $connected);
 //    if($connected) {
 //    } else {
-      $state = CRM_GoogleCalendarAccess_GoogleCalendarHelper::oauthHelper()->newStateKey();
+      $state = CRM_GithubAccess_GithubHelper::oauthHelper()->newStateKey();
       $redirect_url= CRM_OauthSync_OAuthHelper::generateRedirectUrlEncoded();
-      CRM_GoogleCalendarAccess_GoogleCalendarHelper::oauthHelper()->setOauthCallbackReturnPath(
+      CRM_GithubAccess_GithubHelper::oauthHelper()->setOauthCallbackReturnPath(
         join('/', $this->urlPath)
       );
       $scope = urlencode("https://www.googleapis.com/auth/calendar");

@@ -1,12 +1,12 @@
 <?php
 
 // AUTO-GENERATED FILE -- Civix may overwrite any changes made to this file
-use CRM_GoogleCalendarAccess_ExtensionUtil as E;
+use CRM_GithubAccess_ExtensionUtil as E;
 
 /**
  * Base class which provides helpers to execute upgrade logic
  */
-class CRM_GoogleCalendarAccess_Upgrader_Base {
+class CRM_GithubAccess_Upgrader_Base {
 
   /**
    * @var varies, subclass of this
@@ -45,8 +45,8 @@ class CRM_GoogleCalendarAccess_Upgrader_Base {
   static public function instance() {
     if (!self::$instance) {
       // FIXME auto-generate
-      self::$instance = new CRM_GoogleCalendarAccess_Upgrader(
-        'com.hjed.civicrm.google_calendar_access',
+      self::$instance = new CRM_GithubAccess_Upgrader(
+        'com.hjed.civicrm.github_access',
         realpath(__DIR__ . '/../../../')
       );
     }
@@ -60,7 +60,7 @@ class CRM_GoogleCalendarAccess_Upgrader_Base {
    * task-context; otherwise, this will be non-reentrant.
    *
    * @code
-   * CRM_GoogleCalendarAccess_Upgrader_Base::_queueAdapter($ctx, 'methodName', 'arg1', 'arg2');
+   * CRM_GithubAccess_Upgrader_Base::_queueAdapter($ctx, 'methodName', 'arg1', 'arg2');
    * @endcode
    */
   static public function _queueAdapter() {
